@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Irrigação</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .box {
+      padding: 20px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+
+    .seco {
+      background-color: red;
+      color: white;
+    }
+
+    .umido {
+      background-color: green;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Monitor de Umidade</h1>
+
+  <div id="box" class="box">
+    <h2 id="status">Carregando...</h2>
+    <p id="valor"></p>
+  </div>
+
+  <script>
+    async function atualizar() {
+      const res = await fetch("/status");
+      const data = await res.json();
+
+      const box = document.getElementById("box");
+
+      document.getElementById("status").innerText = data.status;
+      document.getElementById("valor").innerText = "Valor: " + data.valor;
+
+      if (data.status === "Seco") {
+        box.className = "box seco";
+      } else {
+        box.className = "box umido";
+      }
+    }
+
+    setInterval(atualizar, 1000);
+    atualizar();
+  </script>
+
+</body>
+</html>
